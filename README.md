@@ -279,6 +279,15 @@ home_penalty_yards
 
 ## Conclusions ##
 
+We can see from the scatterplots for Gillette Stadium (Patriots) that most of the attendance observations fall in two buckets, with one outlier. Similarly for FirstEnergyStadium (Browns), we can see that most of the attendance observations fall into a single bucket (near 100%). These phenomena are worth investigating further, but for now we will exclude them.
+
+We can also see from the scatterplot for Dignity Health Sports Park (Chargers) that the attendance percentage interval is very narrow. This stadium is actually an MLS (soccer) first stadium with a total capacity of only 27,000, a clear outlier among NFL stadiums. In fact, the true range for the attendance values at this park is:
+- min: 25,015
+- median: 25,380
+- max: 25,571
+
+It's hard to imagine a couple hundred fans could have that much of a true impact on the game, so we will exclude this stadium as well. 
+
 The below results fit with our prediction for yards per play:
 - State Farm Stadium (Home of the Cardinals) home yards per play
 - State Farm Stadium (Home of the Cardinals) away yards per play
@@ -287,7 +296,6 @@ The below results fit with our prediction for yards per play:
 - Paul Brown Stadium (Home of the Bengals) home yards per play
 
 The below results were the opposite of our prediction for yards per play:
-- FirstEnergy Stadium (Home of the Browns) away yards per play
 - U.S. Bank Stadium (Home of the Vikings) home yards per play
 - Los Angeles Memorial Coliseum (Home of the Rams) home yards per play
 
@@ -299,13 +307,9 @@ The below results fit with our prediction for penalties and penalty yards:
 - Hard Rock Stadium (Home of the Dolphins) home penalty yards
 - New Era Field (Home of the Bills) home penalties
 - New Era Field (Home of the Bills) home penalty yards
-- Dignity Health Sports Park (Home of the Chargers) home penalties
-- Dignity Health Sports Park (Home of the Chargers) home penalty yards
 
 The below results were the opposite of our prediction for penalties and penalty yards: 
 - TIAA Bank Field (Home of the Jaguars) away penalty yards
-- Gillette Stadium (Home of the Patriots) away penalties
-- Gillette Stadium (Home of the Patriots) away penalty yards
 - MetLife Stadium (Home of the Jets & Giants) away penalties
 - Paul Brown Stadium (Home of the Bengals) away penalties
 - Paul Brown Stadium (Home of the Bengals) away penalty yards
@@ -313,7 +317,7 @@ The below results were the opposite of our prediction for penalties and penalty 
 The results for yards per play are a little surprising - especially the result for U.S. Bank Stadium (Minnesota Vikings) which had the strongest observed relationship (r = -0.55) between attendance percentage and home yards per play, only it was negative! 
 
 Two things to note here:
-1. This analysis does not take into account which team the fans are rooting for. We assume that the fans are primarily rooting for the home team, but there may be circumstances where this is not the case (and many NFL fans have certainly seen games with a large proportion of away fans in the stands). Perhaps this explains the result for FirstEnergy Stadium (Browns) and away yards per play: The Browns have been so bad for so long that fans have mostly given up on the team, and a high attendance percentage is actually a signal that many away fans are attending the game. 
+1. This analysis does not take into account which team the fans are rooting for. We assume that the fans are primarily rooting for the home team, but there may be circumstances where this is not the case (and many NFL fans have certainly seen games with a large proportion of away fans in the stands).
 2. This analysis ignores any correlation between the quality of the opponent and the attendance percentage. We might expect that fans are more likely to attend a game they think will be competitive, i.e. a matchup between two good teams. In that case, the predicted relationship between attendance percentage and yards per play might flip simply due to the fact that the quality of the opponent is much greater. This may help explain the result for U.S. Bank Stadium (Vikings) and the LA Coliseum (Rams). This would be an interesting area for further analysis. 
 
 The results for penalties and penalty yards are very interesting. It seems that (for some teams at least) there is a relationship between attendance percentage and penalties and penalty yards, but that the relationship is positive for home teams and negative for away teams. So how can we explain higher attendance being correlated with more penalties and penalty yards for the home team but fewer penalties and penalty yards for the away team? Perhaps a large and energetic home crowd increases the emotional energy of the home team but decreases it for the away team because the perceived group identity of each player affects whether the crowd energy excites or depresses them. 

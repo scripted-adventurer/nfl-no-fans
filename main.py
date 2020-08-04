@@ -62,7 +62,7 @@ class CalculateAndDisplay:
               data_points.append(row['away_yards'] / row['away_plays']) 
             else:
               data_points.append(row[field])
-        self._linear_regression(attendance, data_points, stadium, field)    
+        self._linear_regression(attendance, data_points, stadium, field) 
   def run(self):
     self.get_data()
     self.check_all_stadiums()
