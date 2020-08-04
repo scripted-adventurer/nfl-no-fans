@@ -1,6 +1,6 @@
 # Understanding a Potentially Fan-Less 2020 NFL Season #
 
-The goal of this project is to understand what impact a reduction or elimination of fans at NFL games in the 2020 season might have on the actual on-field product. American football is an interesting sport to consider this question for because communication (in the form of play calling, audibles, and the snap count) is an integral part of every play, and communication can become quite difficult when a large crowd is making a lot of noise. While strategies to deal with loud crowd noise exist (like hand signals, silent counts, etc.), these strategies may hinder the team's overall effectiveness. Consider that teams typically employ these stragies only when they need to, suggesting that teams operate better when they don't use them. 
+The goal of this project is to understand what impact a reduction or elimination of fans at NFL games in the 2020 season might have on the actual on-field product. In the NFL (and indeed for pretty much all sports) there is a concept of 'home field advantage'. Essentially the idea is that teams perform better when playing at home. This could be due to many different factors (including not having to deal with a sometimes grueling travel schedule), but many fans believe that their team performs better when they are there at the stadium to cheer them on. 
 
 ## Key Questions For Analysis ##
 
@@ -13,20 +13,18 @@ To perform this analysis, I will be using a dataset of NFL regular season game d
 
 ## Method ##
 
-In the NFL (and indeed for pretty much all sports) there is a concept of 'home field advantage'. Essentially the idea is that teams perform better when playing at home. This could be due to many different factors (including not having to deal with a sometimes grueling travel schedule), but many fans believe that their team performs better when they are there at the stadium to cheer them on. 
-<br><br>
-To investigate this phenomenon, I will look at the correlation between attendance and 6 different variables. 
-<br><br>
-Attendance data will be scaled to a percentage of the total capacity for the stadium where the game is played. This is necessary because each NFL stadium has its own unique capacity and thus the range of raw attendance values will depend heavily on what the capacity is. 
-<br><br>
+This analysis will focus on the correlation between attendance and 6 different variables. 
+
+Attendance data will be scaled to a percentage of the total capacity for the stadium where the game is played. Stadium capacities were gathered from Wikipedia and include the listed capacity only, not the 'expandable' capacity. This transformation will hopefully remove some of the noise in the data that is present due to each stadium having its own unique capacity.
+
 I will consider three variables for both the home and away teams (for a total of 6 dependent measures): yards per play, penalties, and penalty yards. 
 - Yards per play is a useful metric that captures how effective a team was on offense. Teams that played well have a larger yards per play measure (and vice versa). This should help us answer the question of "my team plays better when I'm there to cheer them on" (and also "the visiting team plays worse when I'm there to boo them"). 
-- Penalties and penalty yards will help determine a different sort of metric - the emotional 'feel' of the game. There's another common idea in football that teams that get more penalties are 'undisciplined', letting their emotions drive their actions on the field. So we can consider the total number of penalties and penalty yards enforced against teams as a proxy for players' subjective experience of the game.- 
-<br><br>
+- Penalties and penalty yards will help determine a different sort of metric - the emotional 'feel' of the game. There's another common idea in football that teams that get more penalties are 'undisciplined', letting their emotions drive their actions on the field. So we can consider the total number of penalties and penalty yards enforced against teams as a proxy for players' subjective experience of the game.
+
 The Python scripts included in this module contain all the steps for this analysis. At a high level, the process is as follows:
 - Extract the interesting data from the JSON files using Spark and aggregate it into a single data set. (Yes, normally you wouldn't use Spark for such a small dataset, but one of the main goals of this project is to demonstrate Spark usage.)
 - Use Python's scipy module to calculate linear regressions on the dataset and find any interesting relationships. For this analysis, I will consider data aggregated at the league level (i.e. from all stadiums) and data aggregated at the stadium level. 'Interesting' will be defined as any relationship with a p-value of less than 0.1. This is somewhat arbitrary, but it's useful as a starting point. 
-<br><br>
+
 - For any interesting relationships, display the scatter plot (and regression line) using Python's matplotlib module.
 
 ## Hypotheses ##
@@ -34,25 +32,27 @@ The Python scripts included in this module contain all the steps for this analys
 Based on the common conception of 'home field advantage', we can make two predictions about the data for yards per play:
 - Home yards per play will be positively correlated with the attendance percentage
 - Away yards per play will be negatively correlated with the attendance percentage
+
 These two predictions essentially state the informal idea of "teams play better in front of their own fans and worse in front of other teams' fans".
-<br><br>
+
 Based on the view of penalties being associated with 'undisciplined' teams and the crowds' psychological impact on the players, we can make another prediction about penalties and penalty yards: 
 - Home penalties, away penalties, home penalty yards, and away penalty yards will be positively correlated with attendance percentage
+
 This prediction states that as the crowd size percentage gets larger, players from both teams will be more 'fired up' psychologically, resulting in more penalties and penalty yards. 
 
-## Results and Analysis ##
+## Results ##
 
-First let's check out the league wide results:
-<br><br>
-Found relation for All Stadiums away_yards_per_play
+First let's check for any correlations in the league wide dataset:
+
+away_yards_per_play
 - slope = -0.8432521291980726
 - intercept = 4.899133645015511
 - r = -0.062369561287414506
 - p = 0.02689919128289022
 - std. error = 0.3806017463469944
-<br><br>
+
 We see there is a statistically significant relationship between attendance percentage and away yards per play, but it's so small (r = -0.06) as to not be meaningful.
-<br><br>
+
 Moving on to individual stadiums, below are the interesting relationships and associated scatter plots for each stadium.
 
 ### M&T Bank Stadium (Home of the Ravens) ###
@@ -311,13 +311,13 @@ The below results were the opposite of our prediction for penalties and penalty 
 - Paul Brown Stadium (Home of the Bengals) away penalty yards
 
 The results for yards per play are a little surprising - especially the result for U.S. Bank Stadium (Minnesota Vikings) which had the strongest observed relationship (r = -0.55) between attendance percentage and home yards per play, only it was negative! 
-<br><br>
+
 Two things to note here:
-1. This analysis does not take into account which team the fans are rooting for. We assume that the fans are primarily rooting for the home team, but there may be circumstances where this is not the case (and many NFL fans have certainly seen games with a large proportion of away fans in the stands). Perhaps this explains the result for FirstEnergy Stadium (Cleveland Browns) and away yards per play: The Browns have been so bad for so long that fans have mostly given up on the team, and a high attendance percentage is actually a signal that many away fans are attending the game. 
+1. This analysis does not take into account which team the fans are rooting for. We assume that the fans are primarily rooting for the home team, but there may be circumstances where this is not the case (and many NFL fans have certainly seen games with a large proportion of away fans in the stands). Perhaps this explains the result for FirstEnergy Stadium (Browns) and away yards per play: The Browns have been so bad for so long that fans have mostly given up on the team, and a high attendance percentage is actually a signal that many away fans are attending the game. 
 2. This analysis ignores any correlation between the quality of the opponent and the attendance percentage. We might expect that fans are more likely to attend a game they think will be competitive, i.e. a matchup between two good teams. In that case, the predicted relationship between attendance percentage and yards per play might flip simply due to the fact that the quality of the opponent is much greater. This may help explain the result for U.S. Bank Stadium (Vikings) and the LA Coliseum (Rams). This would be an interesting area for further analysis. 
-<br><br>
+
 The results for penalties and penalty yards are very interesting. It seems that (for some teams at least) there is a relationship between attendance percentage and penalties and penalty yards, but that the relationship is positive for home teams and negative for away teams. So how can we explain higher attendance being correlated with more penalties and penalty yards for the home team but fewer penalties and penalty yards for the away team? Perhaps a large and energetic home crowd increases the emotional energy of the home team but decreases it for the away team because the perceived group identity of each player affects whether the crowd energy excites or depresses them. 
-<br><br>
+
 It's important to note that this analysis looks at the penalties called by the referees (and is not, therefore, a perfect measure of fouls actually committed). Perhaps large crowds increase how likely referees are to make a call against the home team (maybe as an attempt to 'keep the game under control' if they feel like the large crowd is getting unruly). 
-<br><br>
+
 As a final wrap-up, what conclusions can we draw from this analysis? In general, the impact of fan attendance on NFL games is complicated and depends on the individual teams and stadiums involved. However for some teams there does seem to be a positive relationship between fan attendance and penalties and penalty yards for the home team, and a negative relationship between fan attendance and penalties and penalty yards for the away team. Of course these are correlations, not causations, so we can't conclusively say that in a season without fans these teams will see fewer penalties for themselves and more for their opponents at their home games. But if our reasoning about crowd size and the emotional impact on players is correct, maybe we can expect teams to play with more similar emotional styles, whether they are at home or on the road. 
